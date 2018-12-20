@@ -84,6 +84,7 @@ If you use YEDDA for research, please cite our [ACL paper](https://arxiv.org/pdf
 
 Updating...
 ====
+* 2018-Dec-20,update Annotation py script      (me)
 * 2018-Dec-19,change the project in which can run in python3,windows os.      (me)
 * 2018-Oct-20, YEDDA has a slight update in which shortcut maps can be edited, stored and switched seamlessly.
 * 2018-May-07, Repository is renamed as YEDDA now!
