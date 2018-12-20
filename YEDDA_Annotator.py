@@ -12,11 +12,24 @@ import tkinter.filedialog as Filedialog
 from tkinter.font import *
 import re
 from collections import deque
-import pickle
+#import pickle
+import json
 import os.path
 import platform
 from utils.recommend import *
 import tkinter.messagebox as tkMessageBox
+
+class StrToBytes:
+    def __init__(self, fileobj):
+        self.fileobj = fileobj
+    def read(self, size):
+        return self.fileobj.read(size).encode()
+    def readline(self, size=-1):
+        return self.fileobj.readline(size).encode()
+#class BytesToSTr:
+#    def __init__(self,bytesobj):
+#        self.bytesobj = bytesobj
+#    def
 
 
 class Example(Frame):
@@ -31,15 +44,17 @@ class Example(Frame):
         self.recommendFlag = True
         self.history = deque(maxlen=20)
         self.currentContent = deque(maxlen=1)
-        self.pressCommand = {'a':"Artifical",
-                             'b':"Event",
-                             'c':"Fin-Concept",
-                             'd':"Location",
-                             'e':"Organization",
-                             'f':"Person",
-                             'g':"Sector",
-                             'h':"Other"
-                             }
+        self.pressCommand = {}
+        # self.pressCommand = {'a':"Artifical",
+        #                      'b':"Event",
+        #                      'c':"Fin-Concept",
+        #                      'd':"Location",
+        #                      'e':"Organization",
+        #                      'f':"Person",
+        #                      'g':"Sector",
+        #                      'h':"Other",
+        #                      'i':"sex"
+        #                      }
         self.allKey = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         self.controlCommand = {'q':"unTag", 'ctrl+z':'undo'}
         self.labelEntryList = []
@@ -658,8 +673,8 @@ class Example(Frame):
         for idx in range(1, delete_num+1):
             self.labelEntryList[listLength-idx].delete(0,END)
             self.shortcutLabelList[listLength-idx].config(text="NON= ")
-        with open(self.configFile, 'wb') as fp:
-            pickle.dump(self.pressCommand, fp)
+        with open(self.configFile, 'w',encoding='utf-8') as fp:
+            json.dump(self.pressCommand, fp)
         self.setMapShow()
         tkMessageBox.showinfo("Remap Notification", "Shortcut map has been updated!\n\nConfigure file has been saved in File:" + self.configFile)
 
@@ -693,17 +708,16 @@ class Example(Frame):
         if not self.configFile.endswith(".config"):
             self.configFile += ".config"
         print(self.configFile)
-        with open(self.configFile, 'wb') as fp:
-
-            pickle.dump(self.pressCommand, fp)
+        with open(self.configFile, 'w', encoding='utf-8') as fp:
+            json.dump(self.pressCommand, fp)
         self.setMapShow()
         tkMessageBox.showinfo("Save New Map Notification", "Shortcut map has been saved and updated!\n\nConfigure file has been saved in File:" + self.configFile)
 
     ## show shortcut map
     def setMapShow(self):
         if os.path.isfile(self.configFile):
-            with open (self.configFile, 'rb') as fp:
-                self.pressCommand = pickle.load(fp)
+            with open (self.configFile, 'r', encoding='utf-8') as fp:
+                self.pressCommand = json.load(fp)
         hight = len(self.pressCommand)
         width = 2
         row = 0
